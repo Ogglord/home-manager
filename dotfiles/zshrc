@@ -1,0 +1,73 @@
+# History settings
+HISTSIZE=10000
+SAVEHIST=10000
+HISTFILE=~/.zsh_history
+setopt hist_ignore_dups  # ignore duplicate commands in history
+setopt hist_ignore_space  # ignore commands that start with a space
+setopt hist_verify  # verify the command before executing it from history
+
+# load aliases
+source ~/.zsh_aliases
+
+# where do you want to store your plugins?
+ZPLUGINDIR=${ZPLUGINDIR:-${ZDOTDIR:-$HOME/.config/zsh}/plugins}
+
+# get zsh_unplugged and store it with your other plugins
+if [[ ! -d $ZPLUGINDIR/zsh_unplugged ]]; then
+  git clone --quiet https://github.com/mattmc3/zsh_unplugged $ZPLUGINDIR/zsh_unplugged
+fi
+
+source $ZPLUGINDIR/zsh_unplugged/zsh_unplugged.zsh
+
+
+# don't resolve symlinks and ignore symlinked home in ostree distros
+export _Z_NO_RESOLVE_SYMLINKS=1
+export _Z_EXCLUDE_DIRS=("/var/home")
+
+# make list of the Zsh plugins you use
+repos=(
+  # plugins that you want loaded first
+  sindresorhus/pure
+
+  # Essentially, if you add romkatv/zsh-defer to your plugins list, 
+  # everything you load afterwards will use zsh-defer, 
+  # meaning you'll get speeds similar to zinit's turbo mode.
+  romkatv/zsh-defer
+
+  # other plugins
+  zsh-users/zsh-completions
+  rupa/z
+  # ...
+
+  # plugins you want loaded last
+  zsh-users/zsh-syntax-highlighting
+  zsh-users/zsh-history-substring-search
+  zsh-users/zsh-autosuggestions
+)
+
+# now load your plugins
+plugin-load $repos
+
+function plugin-update {
+  ZPLUGINDIR=${ZPLUGINDIR:-$HOME/.config/zsh/plugins}
+  for d in $ZPLUGINDIR/*/.git(/); do
+    echo "Updating ${d:h:t}..."
+    command git -C "${d:h}" pull --ff --recurse-submodules --depth 1 --rebase --autostash
+  done
+}
+
+function plugin-list {  
+  #ls $ZPLUGINDIR
+  for d in $ZPLUGINDIR/*/.git; do
+    git -C "${d:h}" remote get-url origin
+  done
+}
+
+# The following will use the whole line. See man zshcontrib
+autoload -U up-line-or-beginning-search
+autoload -U down-line-or-beginning-search
+zle -N up-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey "${terminfo[kcuu1]}" history-substring-search-up # or '\eOA'
+bindkey "${terminfo[kcud1]}" history-substring-search-down # or '\eOB'
+HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
