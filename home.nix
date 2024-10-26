@@ -31,7 +31,7 @@ in
         comma # run any app without installing, prefix it with ","
         eza
         gh
-        git
+        #git
         fortune
         #kmon # kernel module TUI
         less
@@ -62,6 +62,18 @@ in
     #   org.gradle.console=verbose
     #   org.gradle.daemon.idletimeout=3600000
     # '';
+  };
+
+  programs.git = {
+    enable = true;
+    # Additional options for the git program
+    package = pkgs.gitAndTools.gitFull; # Install git wiith all the optional extras
+    userName = "Ogglord";
+    userEmail = email;
+    extraConfig = {     
+      core.editor = "nano";     
+      credential.helper = "cache";
+    };
   };
 
   # Home Manager can also manage your environment variables through
