@@ -15,38 +15,39 @@ in
 
 
   home.packages = with pkgs; [
-    nixpkgs-fmt
 
     (nerdfonts.override { fonts = [ "Hack" "Meslo" ]; })
 
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
     # # environment:
-     (writeShellScriptBin "help" ''
-       echo "Hello, ${config.home.username}!"
-     '')
-        bat
-        btop
-        byobu
-        comma # run any app without installing, prefix it with ","
-        eza
-        gh
-        #git
-        fortune
-        #kmon # kernel module TUI
-        less
-        macchina # neofetch alternative in rust
-	      ncdu
-        nil # nix language interpreter
-        nixpkgs-fmt
-	      #powertop
-        rclone
-        rsync
-        smartmontools
-        #sysz # systemctl TUI
-        tmux
-        tree
-        zsh
+    (writeShellScriptBin "help" ''
+      echo "Hello, ${config.home.username}!"
+    '')
+
+    bat
+    btop
+    byobu
+    comma # run any app without installing, prefix it with ","
+    eza
+    gh
+    #git
+    fortune
+    #kmon # kernel module TUI
+    less
+    macchina # neofetch alternative in rust
+    micro
+    ncdu
+    nil # nix language interpreter
+    nixpkgs-fmt
+    #powertop
+    rclone
+    rsync
+    smartmontools
+    #sysz # systemctl TUI
+    tmux
+    tree
+    zsh
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -62,6 +63,10 @@ in
     #   org.gradle.console=verbose
     #   org.gradle.daemon.idletimeout=3600000
     # '';
+
+    ".config/macchina/themes/birdie.toml".source = dotfiles/macchina_birdie.toml;
+    ".config/macchina/themes/birdie.ascii".source = dotfiles/macchina_birdie.ascii;
+    ".config/macchina/macchina.toml".source = dotfiles/macchina.toml;
   };
 
   programs.git = {
@@ -70,8 +75,8 @@ in
     package = pkgs.gitAndTools.gitFull; # Install git wiith all the optional extras
     userName = "Ogglord";
     userEmail = email;
-    extraConfig = {     
-      core.editor = "nano";     
+    extraConfig = {
+      core.editor = "nano";
       credential.helper = "cache";
     };
   };
@@ -93,7 +98,7 @@ in
   #  /etc/profiles/per-user/ogge/etc/profile.d/hm-session-vars.sh
   #
   home.sessionVariables = {
-     EDITOR = "micro";
+    EDITOR = "micro";
   };
 
   # Let Home Manager install and manage itself.
@@ -102,9 +107,9 @@ in
   home.activation =
     {
       setupGitAuth = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-              	echo "Configuring git to use gh cli auth..."
-                export PATH="${pkgs.git}/bin:''$PATH"
-                ${pkgs.gh}/bin/gh auth setup-git
+        	echo "Configuring git to use gh cli auth..."
+          export PATH="${pkgs.git}/bin:''$PATH"
+          ${pkgs.gh}/bin/gh auth setup-git
       '';
     };
 }
