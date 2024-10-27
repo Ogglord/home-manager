@@ -11,14 +11,28 @@ setopt hist_verify  # verify the command before executing it from history
 source ~/.zsh_aliases
 
 # where do you want to store your plugins?
-ZPLUGINDIR=${ZPLUGINDIR:-${ZDOTDIR:-$HOME/.config/zsh}/plugins}
+ZPLUGINDIR="$HOME/.config/zsh/plugins"
 
-# get zsh_unplugged and store it with your other plugins
-if [[ ! -d $ZPLUGINDIR/zsh_unplugged ]]; then
-  git clone --quiet https://github.com/mattmc3/zsh_unplugged $ZPLUGINDIR/zsh_unplugged
-fi
-
-source $ZPLUGINDIR/zsh_unplugged/zsh_unplugged.zsh
+function plugin-load {
+  local repo plugdir initfile initfiles=()
+  : ${ZPLUGINDIR:=${ZDOTDIR:-~/.config/zsh}/plugins}
+  for repo in $@; do
+    plugdir=$ZPLUGINDIR/${repo:t}
+    initfile=$plugdir/${repo:t}.plugin.zsh
+    if [[ ! -d $plugdir ]]; then
+      echo "Cloning $repo..."
+      git clone -q --depth 1 --recursive --shallow-submodules \
+        https://github.com/$repo $plugdir
+    fi
+    if [[ ! -e $initfile ]]; then
+      initfiles=($plugdir/*.{plugin.zsh,zsh-theme,zsh,sh}(N))
+      (( $#initfiles )) || { echo >&2 "No init file found '$repo'." && continue }
+      ln -sf $initfiles[1] $initfile
+    fi
+    fpath+=$plugdir
+    (( $+functions[zsh-defer] )) && zsh-defer . $initfile || . $initfile
+  done
+}
 
 
 # don't resolve symlinks and ignore symlinked home in ostree distros
@@ -50,7 +64,7 @@ repos=(
 plugin-load $repos
 
 function plugin-update {
-  ZPLUGINDIR=${ZPLUGINDIR:-$HOME/.config/zsh/plugins}
+  ZPLUGINDIR="$HOME/.config/zsh/plugins"
   for d in $ZPLUGINDIR/*/.git(/); do
     echo "Updating ${d:h:t}..."
     command git -C "${d:h}" pull --ff --recurse-submodules --depth 1 --rebase --autostash
@@ -64,14 +78,13 @@ function plugin-list {
   done
 }
 
-# The following will use the whole line. See man zshcontrib
-#autoload -U up-line-or-beginning-search
-#autoload -U down-line-or-beginning-search
-#zle -N up-line-or-beginning-search
-#zle -N down-line-or-beginning-search
-bindkey "${terminfo[kcuu1]}" history-substring-search-up # or '\eOA'
-bindkey "${terminfo[kcud1]}" history-substring-search-down # or '\eOB'
+# for partial history search
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
-
 HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+
+# this was the mappings in ptyxis at least
+bindkey '^[[H' beginning-of-line
+bindkey '^[[F' end-of-line
+bindkey '^[[3~' delete-char
+

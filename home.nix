@@ -31,24 +31,25 @@ in
     comma # run any app without installing, prefix it with ","
     eza
     gh
-    #git
     fortune
-    #kmon # kernel module TUI
     less
     macchina # neofetch alternative in rust
     micro
     ncdu
     nil # nix language interpreter
     nixpkgs-fmt
-    #powertop
     rclone
     rsync
     smartmontools
-    #sysz # systemctl TUI
     tmux
     tree
-    zsh
+  ] ++ lib.optionalAttrs pkgs.stdenv.isLinux [
+    # elements to include conditionally
+    kmon # kernel module TUI
+    sysz # systemctl TUI
+    powertop
   ];
+
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
