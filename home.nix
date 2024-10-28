@@ -4,6 +4,12 @@ let
   homeDir = if isDarwin then "/Users/" else "/home/";
   username = if isDarwin then "oscaragren" else "ogge";
   email = "oag@proton.me";
+  linuxOnlyPackages =  with pkgs; [
+    kmon # kernel module TUI
+    sysz # systemctl TUI
+    powertop
+  ];
+
 in
 {
 
@@ -12,18 +18,10 @@ in
     inherit username;
     stateVersion = "24.05";
   };
-
-
+ 
   home.packages = with pkgs; [
 
     (nerdfonts.override { fonts = [ "Hack" "Meslo" ]; })
-
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    (writeShellScriptBin "help" ''
-      echo "Hello, ${config.home.username}!"
-    '')
 
     bat
     btop
@@ -43,12 +41,8 @@ in
     smartmontools
     tmux
     tree
-  ] ++ lib.optionalAttrs pkgs.stdenv.isLinux [
-    # elements to include conditionally
-    kmon # kernel module TUI
-    sysz # systemctl TUI
-    powertop
-  ];
+  ] 
+  ++ ( if pkgs.stdenv.isLinux then linuxOnlyPackages else [] );
 
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
