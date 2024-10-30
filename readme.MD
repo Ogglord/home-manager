@@ -32,10 +32,16 @@ You might want to add the following to your .profile at least initially until ni
 ```bash
 source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 ```
+## Daily usage
 
-Subsequent updates are simplified with my justfile
+Rebuild and switch if you changed the config or dotfiles
 
 ```bash
 just switch
 ```
 
+Update your software
+
+```bash
+just update
+```
