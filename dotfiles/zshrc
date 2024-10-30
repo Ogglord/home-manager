@@ -1,3 +1,5 @@
+export ZSHRC_LAST_LOADED="$(date '+%Y-%m-%d %H:%M:%S')"
+
 # History settings
 HISTSIZE=10000
 SAVEHIST=10000
@@ -6,9 +8,16 @@ setopt appendhistory
 setopt hist_ignore_dups  # ignore duplicate commands in history
 setopt hist_ignore_space  # ignore commands that start with a space
 setopt hist_verify  # verify the command before executing it from history
+# try to find a suggestion from your history first
+# then find a suggestion from the completion engine
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+
 
 # load aliases
 source ~/.zsh_aliases
+
+# load autocompletions
+autoload -U +X compinit && compinit
 
 # where do you want to store your plugins?
 ZPLUGINDIR="$HOME/.config/zsh/plugins"
@@ -92,8 +101,23 @@ bindkey '^[[3~' delete-char
 bindkey '^[[1;5D' backward-word # required for iterm2 macos
 bindkey '^[[1;5C' forward-word # required for iterm2 macos
 
-# load autocompletions
-autoload -U +X compinit && compinit
+
 
 # load our custom justfile completions
 source ~/.config/zsh/just.zsh
+
+function zsh_clear()
+{
+	reset
+	zle redisplay
+}
+zle -N zsh_clear
+bindkey '^[k' zsh_clear
+
+exec-zsh() {
+  zle -I
+  exec zsh <$TTY
+}
+
+zle -N exec-zsh
+bindkey '^N' exec-zsh

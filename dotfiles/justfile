@@ -12,6 +12,7 @@ import? "/usr/share/ublue-os/justfile"
 is_ublue := path_exists('/usr/share/ublue-os/justfile')
 topgrade_cfg := if is_ublue == "true" { "/usr/share/ublue-os/topgrade.toml" } else { "~/.config/topgrade/topgrade.toml" }
 topgrade_msg := if is_ublue == "true" { "ublue mode" } else { "normal mode" }
+ZSHRC_LAST_LOADED := x'${ZSHRC_LAST_LOADED:-unset}'
 
 # default is to list commands
 default:
@@ -25,22 +26,25 @@ update:
     /usr/bin/topgrade --config "{{topgrade_cfg}}" --keep
 
 # reload zsh config
-reload-zsh:
-    #!/usr/bin/env zsh
-    echo "Reloading zsh..."
-    source ~/.zshrc
+reload-zsh:    
+    echo "Press ctrl+N to reload zsh config"    
 
 #re-build home-manager config and switch to it
 switch:
-    home-manager switch    
+    home-manager switch -b backup
     just reload-zsh
 
 # re-build home-manager config
 build:
     home-manager build
 
+clean:
+    sudo nix profile wipe-history --profile /nix/var/nix/profiles/system  --older-than 7d
+    nix profile wipe-history --profile   --older-than 7d
+
 shell-test:
-    echo "$SHELL"
+    @echo "$SHELL"
+    @echo "Loaded: {{ZSHRC_LAST_LOADED}}"
 
 default_comment := 'auto commit'
 
