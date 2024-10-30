@@ -108,6 +108,7 @@ in
         	echo "Configuring git to use gh cli auth..."
           export PATH="${pkgs.git}/bin:''$PATH"
           ${pkgs.gh}/bin/gh auth setup-git
+          ${pkgs.just}/bin/just --completions zsh > ~/.config/zsh/just.zsh
       '';
     };
 }

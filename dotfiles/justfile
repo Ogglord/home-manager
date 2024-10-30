@@ -1,17 +1,32 @@
 # Justfile
-set shell := ["zsh", "-cu"]
+#set shell := ["zsh", "-c"]
+set dotenv-load
+
+# default is to list commands
+default:
+  @just --list --unsorted
+
 # update system
 update:
     topgrade
 
+#alias for update
 alias upgrade := update
 
-# re-build, switch home-manager config and then reload shell
-switch:
-    home-manager switch
+# reload zsh config
+reload-zsh:
+    #!/usr/bin/env zsh
     echo "Reloading zsh..."
     source ~/.zshrc
+
+#re-build home-manager config and switch to it
+switch:
+    home-manager switch    
+    just reload-zsh
 
 # re-build home-manager config
 build:
     home-manager build
+
+shell-test:
+    echo "$SHELL"
