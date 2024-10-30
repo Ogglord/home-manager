@@ -4,7 +4,7 @@ let
   homeDir = if isDarwin then "/Users/" else "/home/";
   username = if isDarwin then "oscaragren" else "ogge";
   email = "oag@proton.me";
-  linuxOnlyPackages =  with pkgs; [
+  linuxOnlyPackages = with pkgs; [
     kmon # kernel module TUI
     sysz # systemctl TUI
     powertop
@@ -18,7 +18,7 @@ in
     inherit username;
     stateVersion = "24.05";
   };
- 
+
   home.packages = with pkgs; [
 
     (nerdfonts.override { fonts = [ "Hack" "Meslo" ]; })
@@ -43,8 +43,8 @@ in
     tmux
     topgrade
     tree
-  ] 
-  ++ ( if pkgs.stdenv.isLinux then linuxOnlyPackages else [] );
+  ]
+  ++ (if pkgs.stdenv.isLinux then linuxOnlyPackages else [ ]);
 
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
@@ -55,7 +55,7 @@ in
     ".zshrc".source = dotfiles/zshrc;
     ".zsh_aliases".source = dotfiles/zsh_aliases;
     ".justfile".source = dotfiles/justfile;
-
+    ".config/topgrade/topgrade.toml".source = dotfiles/topgrade.toml;
     # # You can also set the file content immediately.
     # ".gradle/gradle.properties".text = ''
     #   org.gradle.console=verbose

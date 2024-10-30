@@ -1,0 +1,14 @@
+[misc]
+no_self_update = true
+disable = ["self_update", "toolbx", "waydroid"]
+ignore_failures = [
+    "distrobox",
+    "flatpak",
+    "brew_cask",
+    "brew_formula",
+    "pip3",
+    "helm",
+    "firmware",
+]
+assume_yes = true
+no_retry = true

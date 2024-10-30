@@ -1,6 +1,17 @@
 # Justfile
 #set shell := ["zsh", "-c"]
-set dotenv-load
+set dotenv-load := true
+set allow-duplicate-variables := true
+set unstable := true
+#set allow-duplicate-recipes := true
+#set ignore-comments := true
+
+# optional import - in case we are on ublue/bazzite/etc
+import? "/usr/share/ublue-os/justfile"
+
+is_ublue := path_exists('/usr/share/ublue-os/justfile')
+topgrade_cfg := if is_ublue == "true" { "/usr/share/ublue-os/topgrade.toml" } else { "~/.config/topgrade/topgrade.toml" }
+topgrade_msg := if is_ublue == "true" { "ublue mode" } else { "normal mode" }
 
 # default is to list commands
 default:
@@ -8,10 +19,10 @@ default:
 
 # update system
 update:
-    topgrade
-
-#alias for update
-alias upgrade := update
+    #!/usr/bin/env bash
+    echo "Invoking upgrade - {{topgrade_msg}}"
+    [ -f /usr/bin/ublue-update ] && ublue-update --wait
+    /usr/bin/topgrade --config "{{topgrade_cfg}}" --keep
 
 # reload zsh config
 reload-zsh:
@@ -30,3 +41,17 @@ build:
 
 shell-test:
     echo "$SHELL"
+
+default_comment := 'auto commit'
+
+[no-cd, script]
+push comment=default_comment:
+    git add .
+    echo "Committing with message: {{comment}}"
+    git commit -m "{{comment}}"
+    echo "Pushing to remote"
+    git push
+
+[no-cd]
+pull:
+    git pull --rebase --autostash
