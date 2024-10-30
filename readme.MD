@@ -33,3 +33,9 @@ You might want to add the following to your .profile at least initially until ni
 source "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
 ```
 
+Subsequent updates are simplified with my justfile
+
+```bash
+just switch
+```
+
