@@ -40,6 +40,7 @@ in
     rsync
     smartmontools
     tmux
+    topgrade
     tree
   ] 
   ++ ( if pkgs.stdenv.isLinux then linuxOnlyPackages else [] );

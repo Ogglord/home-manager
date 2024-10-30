@@ -29,3 +29,7 @@ alias p='ping google.com'
 alias cdc='cd ~/.config'
 alias cdh='cd ~/.config/home-manager'
 alias neofetch='$(command -v macchina &> /dev/null && echo macchina || echo neofetch)'
+
+# Nix Home Manager
+alias switch='~/.nix-profile/bin/home-manager switch && echo "Reloading Zsh..." && source ~/.zshrc'
+alias build='~/.nix-profile/bin/home-manager build'
