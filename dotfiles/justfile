@@ -1,0 +1,17 @@
+# Justfile
+set shell := ["zsh", "-cu"]
+# update system
+update:
+    topgrade
+
+alias upgrade := update
+
+# re-build, switch home-manager config and then reload shell
+switch:
+    home-manager switch
+    echo "Reloading zsh..."
+    source ~/.zshrc
+
+# re-build home-manager config
+build:
+    home-manager build

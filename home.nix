@@ -30,6 +30,7 @@ in
     eza
     gh
     fortune
+    just
     less
     macchina # neofetch alternative in rust
     micro
@@ -53,6 +54,7 @@ in
     # # the Nix store. Activating the configuration will then make '~/.zshrc' a symlink to the Nix store copy.
     ".zshrc".source = dotfiles/zshrc;
     ".zsh_aliases".source = dotfiles/zsh_aliases;
+    ".justfile".source = dotfiles/justfile;
 
     # # You can also set the file content immediately.
     # ".gradle/gradle.properties".text = ''
