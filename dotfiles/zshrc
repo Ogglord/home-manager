@@ -42,7 +42,8 @@ export _Z_EXCLUDE_DIRS=("/var/home")
 # make list of the Zsh plugins you use
 repos=(
   # plugins that you want loaded first
-  sindresorhus/pure
+  #sindresorhus/pure
+  agkozak/agkozak-zsh-prompt
 
   # Essentially, if you add romkatv/zsh-defer to your plugins list, 
   # everything you load afterwards will use zsh-defer, 
