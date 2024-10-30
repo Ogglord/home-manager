@@ -4,20 +4,31 @@ export ZSHRC_LAST_LOADED="$(date '+%Y-%m-%d %H:%M:%S')"
 HISTSIZE=10000
 SAVEHIST=10000
 HISTFILE=~/.zsh_history
-setopt appendhistory
+#setopt appendhistory
 setopt hist_ignore_dups  # ignore duplicate commands in history
 setopt hist_ignore_space  # ignore commands that start with a space
 setopt hist_verify  # verify the command before executing it from history
 # try to find a suggestion from your history first
 # then find a suggestion from the completion engine
-ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+#ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 
+# for partial history search
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+#HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
+
+# this was the mappings in ptyxis at least
+bindkey '^[[H' beginning-of-line
+bindkey '^[[F' end-of-line
+bindkey '^[[3~' delete-char
+bindkey '^[[1;5D' backward-word # required for iterm2 macos
+bindkey '^[[1;5C' forward-word # required for iterm2 macos
 
 # load aliases
 source ~/.zsh_aliases
 
 # load autocompletions
-autoload -U +X compinit && compinit
+#autoload -U +X compinit && compinit
 
 # where do you want to store your plugins?
 ZPLUGINDIR="$HOME/.config/zsh/plugins"
@@ -58,7 +69,7 @@ repos=(
   # Essentially, if you add romkatv/zsh-defer to your plugins list, 
   # everything you load afterwards will use zsh-defer, 
   # meaning you'll get speeds similar to zinit's turbo mode.
-  romkatv/zsh-defer
+  #romkatv/zsh-defer
 
   # other plugins
   zsh-users/zsh-completions
@@ -68,7 +79,7 @@ repos=(
   # plugins you want loaded last
   zsh-users/zsh-syntax-highlighting
   zsh-users/zsh-history-substring-search
-  zsh-users/zsh-autosuggestions
+  #zsh-users/zsh-autosuggestions  ## some bug causing zsh to crash
 )
 
 # now load your plugins
@@ -89,35 +100,13 @@ function plugin-list {
   done
 }
 
-# for partial history search
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
-HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
-
-# this was the mappings in ptyxis at least
-bindkey '^[[H' beginning-of-line
-bindkey '^[[F' end-of-line
-bindkey '^[[3~' delete-char
-bindkey '^[[1;5D' backward-word # required for iterm2 macos
-bindkey '^[[1;5C' forward-word # required for iterm2 macos
-
-
-
 # load our custom justfile completions
-source ~/.config/zsh/just.zsh
+#source ~/.config/zsh/just.zsh
 
-function zsh_clear()
-{
-	reset
-	zle redisplay
-}
-zle -N zsh_clear
-bindkey '^[k' zsh_clear
-
-exec-zsh() {
+exec-new-zsh() {
   zle -I
   exec zsh <$TTY
 }
 
-zle -N exec-zsh
-bindkey '^N' exec-zsh
+zle -N exec-new-zsh
+bindkey '^N' exec-new-zsh
