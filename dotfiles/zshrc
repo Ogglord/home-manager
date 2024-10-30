@@ -13,6 +13,7 @@ source ~/.zsh_aliases
 # where do you want to store your plugins?
 ZPLUGINDIR="$HOME/.config/zsh/plugins"
 
+# no need for a plugin manager <3
 function plugin-load {
   local repo plugdir initfile initfiles=()
   : ${ZPLUGINDIR:=${ZDOTDIR:-~/.config/zsh}/plugins}
