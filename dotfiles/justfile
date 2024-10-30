@@ -20,7 +20,7 @@ default:
 # update system
 update:
     #!/usr/bin/env bash
-    echo "Invoking upgrade - {{topgrade_msg}}"
+    echo "Running topgrade in {{topgrade_msg}}..."
     [ -f /usr/bin/ublue-update ] && ublue-update --wait
     /usr/bin/topgrade --config "{{topgrade_cfg}}" --keep
 
