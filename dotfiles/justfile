@@ -9,11 +9,13 @@ set unstable := true
 # optional import - in case we are on ublue/bazzite/etc
 import? "/usr/share/ublue-os/justfile"
 
+HOME := x'${HOME}'
 is_ublue := path_exists('/usr/share/ublue-os/justfile')
-topgrade_cfg := if is_ublue == "true" { "/usr/share/ublue-os/topgrade.toml" } else { "~/.config/topgrade/topgrade.toml" }
+topgrade_cfg := if is_ublue == "true" { "/usr/share/ublue-os/topgrade.toml" } else { x'~/.config/topgrade/topgrade.toml' }
 topgrade_msg := if is_ublue == "true" { "ublue mode" } else { "normal mode" }
 SHELL := x'${SHELL:-unknown}'
 ZSHRC_LAST_LOADED := x'${ZSHRC_LAST_LOADED:-unset}'
+
 
 # default is to list commands
 default:
@@ -24,7 +26,7 @@ update:
     #!/usr/bin/env bash
     echo "Running topgrade in {{topgrade_msg}}..."
     [ -f /usr/bin/ublue-update ] && ublue-update --wait
-    /usr/bin/topgrade --config "{{topgrade_cfg}}" --keep
+    topgrade --config "{{topgrade_cfg}}" --keep
 
 # reload zsh config
 reload-zsh:    

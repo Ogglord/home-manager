@@ -62,6 +62,11 @@ in
     #   org.gradle.daemon.idletimeout=3600000
     # '';
 
+    ".config/zsh/zshrc.d" = {
+      source = dotfiles/zshrc.d;
+      recursive = true;
+    };
+
     ".config/macchina/themes/birdie.toml".source = dotfiles/macchina_birdie.toml;
     ".config/macchina/themes/birdie.ascii".source = dotfiles/macchina_birdie.ascii;
     ".config/macchina/macchina.toml".source = dotfiles/macchina.toml;
