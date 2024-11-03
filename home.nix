@@ -3,6 +3,7 @@ let
   inherit (pkgs.stdenv) isLinux isDarwin;
   homeDir = if isDarwin then "/Users/" else "/home/";
   username = if isDarwin then "oscaragren" else "ogge";
+  homedir = homeDir + username;
   email = "oag@proton.me";
   linuxOnlyPackages = with pkgs; [
     kmon # kernel module TUI
@@ -14,7 +15,7 @@ in
 {
 
   home = {
-    homeDirectory = homeDir + username;
+    homeDirectory = homedir;
     inherit username;
     stateVersion = "24.05";
   };
@@ -105,7 +106,8 @@ in
         	echo "Configuring git to use gh cli auth..."
           export PATH="${pkgs.git}/bin:''$PATH"
           ${pkgs.gh}/bin/gh auth setup-git
-          ${pkgs.just}/bin/just --completions zsh > ~/.config/zsh/just.zsh
+          echo "Writing ${homedir}/.config/zsh/zshrc.d/just.zsh..."
+          ${pkgs.just}/bin/just --completions zsh > ${homedir}/.config/zsh/zshrc.d/just.zsh
       '';
     };
 }

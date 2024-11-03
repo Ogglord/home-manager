@@ -11,10 +11,10 @@ setopt hist_verify  # verify the command before executing it from history
 # try to find a suggestion from your history first
 # then find a suggestion from the completion engine
 ZSH_AUTOSUGGEST_STRATEGY=(completion)
-autoload -Uz compinit && compinit
 
 # load autocompletions (is this breaking anything?)
 #autoload -U +X compinit && compinit
+autoload -U compinit && compinit
 
 # where do you want to store your plugins?
 export ZPLUGINDIR="$HOME/.config/zsh/plugins"
@@ -41,7 +41,6 @@ function plugin-load {
   done
 }
 
-
 # don't resolve symlinks and ignore symlinked home in ostree distros
 export _Z_NO_RESOLVE_SYMLINKS=1
 export _Z_EXCLUDE_DIRS=("/var/home")
@@ -65,10 +64,8 @@ repos=(
   # plugins you want loaded last
   zsh-users/zsh-syntax-highlighting
   zsh-users/zsh-history-substring-search
-  zsh-users/zsh-autosuggestions  ## some bug causing zsh to crash
+  zsh-users/zsh-autosuggestions  ## some bug causing zsh to crash - lets evaluate
 )
-
-
 
 # now load your plugins
 plugin-load $repos
@@ -100,6 +97,7 @@ bindkey '^N' exec-new-zsh
 # source local zsrc.d/* files if they exist
 #
 
+
 typeset -ga _zshrcd=(
   $ZSHRCD
   ${ZDOTDIR:-/dev/null}/zshrc.d(N)
@@ -118,3 +116,5 @@ for _zshrcd_file in ${(o)_zshrcd}; do
   source "$_zshrcd_file"
 done
 unset _zshrcd{,_file}
+
+ 
