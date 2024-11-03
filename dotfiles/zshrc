@@ -55,7 +55,7 @@ repos=(
   # Essentially, if you add romkatv/zsh-defer to your plugins list, 
   # everything you load afterwards will use zsh-defer, 
   # meaning you'll get speeds similar to zinit's turbo mode.
-  #romkatv/zsh-defer
+  romkatv/zsh-defer
 
   # other plugins
   zsh-users/zsh-completions
