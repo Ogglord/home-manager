@@ -10,28 +10,14 @@ setopt hist_ignore_space  # ignore commands that start with a space
 setopt hist_verify  # verify the command before executing it from history
 # try to find a suggestion from your history first
 # then find a suggestion from the completion engine
-#ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_STRATEGY=(completion)
+autoload -Uz compinit
 
-# for partial history search
-bindkey '^[[A' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
-#HISTORY_SUBSTRING_SEARCH_ENSURE_UNIQUE=1
-
-# this was the mappings in ptyxis at least
-bindkey '^[[H' beginning-of-line
-bindkey '^[[F' end-of-line
-bindkey '^[[3~' delete-char
-bindkey '^[[1;5D' backward-word # required for iterm2 macos
-bindkey '^[[1;5C' forward-word # required for iterm2 macos
-
-# load aliases
-source ~/.zsh_aliases
-
-# load autocompletions
+# load autocompletions (is this breaking anything?)
 #autoload -U +X compinit && compinit
 
 # where do you want to store your plugins?
-ZPLUGINDIR="$HOME/.config/zsh/plugins"
+export ZPLUGINDIR="$HOME/.config/zsh/plugins"
 
 # no need for a plugin manager <3
 function plugin-load {
@@ -79,8 +65,10 @@ repos=(
   # plugins you want loaded last
   zsh-users/zsh-syntax-highlighting
   zsh-users/zsh-history-substring-search
-  #zsh-users/zsh-autosuggestions  ## some bug causing zsh to crash
+  zsh-users/zsh-autosuggestions  ## some bug causing zsh to crash
 )
+
+rm -f ~/.zcompdump; compinit
 
 # now load your plugins
 plugin-load $repos
@@ -99,9 +87,6 @@ function plugin-list {
     git -C "${d:h}" remote get-url origin
   done
 }
-
-# load our custom justfile completions
-#source ~/.config/zsh/just.zsh
 
 exec-new-zsh() {
   zle -I

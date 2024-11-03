@@ -50,18 +50,10 @@ in
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   home.file = {
-    # # Building this configuration will create a copy of 'dotfiles/zshrc' in
-    # # the Nix store. Activating the configuration will then make '~/.zshrc' a symlink to the Nix store copy.
-    ".zshrc".source = dotfiles/zshrc;
-    ".zsh_aliases".source = dotfiles/zsh_aliases;
     ".justfile".source = dotfiles/justfile;
     ".config/topgrade/topgrade.toml".source = dotfiles/topgrade.toml;
-    # # You can also set the file content immediately.
-    # ".gradle/gradle.properties".text = ''
-    #   org.gradle.console=verbose
-    #   org.gradle.daemon.idletimeout=3600000
-    # '';
 
+    ".zshrc".source = dotfiles/zshrc;
     ".config/zsh/zshrc.d" = {
       source = dotfiles/zshrc.d;
       recursive = true;
