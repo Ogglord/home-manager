@@ -11,7 +11,7 @@ setopt hist_verify  # verify the command before executing it from history
 # try to find a suggestion from your history first
 # then find a suggestion from the completion engine
 ZSH_AUTOSUGGEST_STRATEGY=(completion)
-autoload -Uz compinit
+autoload -Uz compinit && compinit
 
 # load autocompletions (is this breaking anything?)
 #autoload -U +X compinit && compinit
@@ -68,7 +68,7 @@ repos=(
   zsh-users/zsh-autosuggestions  ## some bug causing zsh to crash
 )
 
-rm -f ~/.zcompdump; compinit
+
 
 # now load your plugins
 plugin-load $repos
