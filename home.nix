@@ -104,7 +104,7 @@ in
     {
       setupGitAuth = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
         	echo "Configuring git to use gh cli auth..."
-          export PATH="${pkgs.git}/bin:/opt/homebrew/bin:''$PATH"
+          export PATH="${pkgs.git}/bin:/opt/homebrew/bin:/usr/bin:''$PATH"
           ${pkgs.gh}/bin/gh auth setup-git
           echo "Loading justfile completions to:${homedir}/.config/zsh/zshrc.d/just.zsh..."
           ${pkgs.just}/bin/just --completions zsh > ${homedir}/.config/zsh/zshrc.d/just.zsh
