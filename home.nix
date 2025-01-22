@@ -35,6 +35,7 @@ in
     eza
     gh
     fortune
+    direnv
     just
     less
     macchina # neofetch alternative in rust
@@ -138,6 +139,9 @@ in
         source "''$_zshrcd_file"
       done
       unset _zshrcd{,_file}
+
+      # load direnv
+      eval "$(direnv hook zsh)"
     '';
   };
 
